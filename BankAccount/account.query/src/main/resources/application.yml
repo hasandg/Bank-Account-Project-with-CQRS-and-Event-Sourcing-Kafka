@@ -1,0 +1,41 @@
+server:
+  port: 6001
+
+spring:
+  jpa:
+    # postgreSQL jpa settings
+    #database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    # MySQL jpa settings
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    # postgreSQL datasource settings
+    #    url: jdbc:postgresql://localhost:5432/bankAccount
+    #    username: postgres
+    #    password: hasanRootPsw
+    #MySQL datasource settings
+    url: jdbc:mysql://localhost:3306/bankAccount?createDatabaseIfNotExist=true
+    username: root
+    password: hasanRootPsw
+  kafka:
+    topic: BankAccountEvents
+    listener:
+      ack-mode: MANUAL_IMMEDIATE
+      poll-timeout: 900000
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: bankaccConsumer
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+#  sql:
+#    init:
+#      mode: always
+#      #platform: postgres
